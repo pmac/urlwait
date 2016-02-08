@@ -45,3 +45,18 @@ Usage
         $ urlwait redis://localhost:6379/0 20
         $ urlwait $CACHE_URL 20
         $ URLWAIT_VARNAME=CACHE_URL URLWAIT_TIMEOUT=20 urlwait
+
+The module is also usable in your python code::
+
+    import os
+
+    from urlwait import wait_for_url
+
+
+    if wait_for_url(os.getenv('REDIS_URL')):
+        # do things with the service
+    else:
+        # service likely did not start
+
+If you don't have the service URL but do have the host and port, you can use the
+``wait_for_service(host, port, timeout)`` function instead.

@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='urlwait',
-    version='0.1',
+    version='0.2',
     description='A CLI utility for blocking until a service is listening',
     long_description=open('README.rst').read(),
     author='Paul McLanahan',
@@ -15,6 +15,7 @@ setup(
     },
     url='https://github.com/pmclanahan/urlwait',
     classifiers=[
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: MIT License',

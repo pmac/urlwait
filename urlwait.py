@@ -82,6 +82,19 @@ def wait_for_service(host, port, timeout=DEFAULT_TIMEOUT):
                 time.sleep(1)
 
 
+def wait_for_url(url, timeout=DEFAULT_TIMEOUT):
+    """
+    Return True if connection to the host and port specified in url
+    is successful within the timeout.
+
+    @param url: str: connection url for a TCP service
+    @param timeout: int: length of time in seconds to try to connect before giving up
+    @return: bool
+    """
+    service = urlparse.urlparse(url)
+    return wait_for_service(service.hostname, service.port, timeout)
+
+
 def main():
     args = sys.argv[1:]
     varname = os.getenv('URLWAIT_VARNAME', 'DATABASE_URL')
@@ -95,13 +108,12 @@ def main():
     else:
         service_url = os.environ[varname]
 
-    service = urlparse.urlparse(service_url)
     socket.setdefaulttimeout(int(timeout))
 
-    if wait_for_service(service.hostname, service.port, timeout):
+    if wait_for_url(service_url, timeout):
         return 0
     else:
-        return 'Could not connect to {0} on port {1}'.format(service.hostname, service.port)
+        return 'Could not connect to {0}'.format(service_url)
 
 
 if __name__ == '__main__':
