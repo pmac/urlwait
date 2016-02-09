@@ -3,3 +3,12 @@ language: python
 install:
   - travis_retry pip install tox
 script: tox
+deploy:
+  provider: pypi
+  distributions: sdist bdist_wheel
+  user: pmclanahan
+  password:
+    secure: 0FrNZlMwzWptrCcIGpbm90+bvfz1FT+nFxJBzVj2C0l6CQDere/XZUWxYvsgivCKQC18pu2pWJaVjQgoxzdUVaKV93qcxJgns2puhXQCfBkFzF43RGofNQ32zLRmhArhygb2sgM6dlI9ZU5ccDFG13FWqJUNlFl5yasPUFVje17LcJOhX/aT/UHuLYP9wZHAoXVcrc2it2f8QmAkq5qJRzLgG/0F8PVAaDCOYTjYwXIY4efgttCSNN/koHBWxLHV83VRlr23ZsmNBy3xSx0qfvYoYZXoQL2xxzfadTqZv5zqjvF406HsHH9K1B3V5ztbTGctl9jr0igD4h11hVv1KHfFVLX9+9fVWSrBWt5aO1TIPQYYzhuVXye1MuIbaZLAk5MGN0Eo1QTFV/FuSma1dIldwf7Xai1XzqHFl6+y/CW60ghmFwo8atiuSAqqCWYrqg1n5oLfKXmfdYkihntVqwJrgGoPBHKK+IugzRy2AtiFoLEKtaQgKTwDJg8gzvPYnMqC0kBC7NOIO6VxBgjfJIaMd+w9WFakTcQn6yz08eQZXHd8CeZQMG7LxXbuiomwpgAv1aWQ9J0t27galJcU6f6F4c2FFk4mO6DndkuzUeTzGKQQLcdJa4Zdku0sK69iRmQ8pt8bt7zB2087vFG0tLbshEafQw/luQGyFT7EDeI=
+  on:
+    tags: true
+    repo: pmclanahan/urlwait
