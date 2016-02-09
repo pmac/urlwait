@@ -106,7 +106,10 @@ def main():
         if len(args) == 2:
             timeout = args[1]
     else:
-        service_url = os.environ[varname]
+        try:
+            service_url = os.environ[varname]
+        except KeyError:
+            return 'Environment variable {0} not found'.format(varname)
 
     socket.setdefaulttimeout(int(timeout))
 
