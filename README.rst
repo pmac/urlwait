@@ -2,6 +2,11 @@
 URLWait
 =======
 
+.. image:: https://img.shields.io/travis/pmclanahan/urlwait.svg
+   :target: https://travis-ci.org/pmclanahan/urlwait/
+.. image:: https://img.shields.io/pypi/v/urlwait.svg
+   :target: https://pypi.python.org/pypi/urlwait
+
 I needed a way to block my app from starting until the database service was running and
 accepting connections. This was particularly a problem when using Docker and docker-compose.
 You can run this utility as part of a ``run-dev.sh`` or ``run-tests.sh`` script and it will
