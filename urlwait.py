@@ -40,24 +40,62 @@ except ImportError:
     import urllib.parse as urlparse
 
 
+__all__ = ['wait_for_service', 'wait_for_url']
 DEFAULT_TIMEOUT = 15  # seconds
+DEFAUTL_PORTS = {
+    'amqp': 5672,
+    'http': 80,
+    'https': 443,
+    'mysql': 3306,
+    'mysql2': 3306,
+    'pgsql': 5432,
+    'postgres': 5432,
+    'postgresql': 5432,
+    'redis': 6379,
+    'hiredis': 6379,
+}
 
 
-def service_is_available(host, port):
-    """
-    Return True if the connection to the host and port is successful.
+class ServiceURL(object):
+    host = None
+    port = None
+    scheme = None
 
-    @param host: str: hostname of the server
-    @param port: int: TCP port to which to connect
-    @return: bool
-    """
-    s = socket.socket()
-    try:
-        s.connect((host, port))
-    except Exception:
-        return False
-    else:
-        return True
+    def __init__(self, url, timeout=DEFAULT_TIMEOUT):
+        self.timeout = int(timeout)
+        service = urlparse.urlparse(url)
+        self.scheme = service.scheme
+        self.host = service.hostname
+        self.port = service.port or DEFAUTL_PORTS.get(service.scheme, None)
+
+    def is_available(self):
+        """
+        Return True if the connection to the host and port is successful.
+
+        @return: bool
+        """
+        if not self.port:
+            raise RuntimeError('port is required')
+
+        s = socket.socket()
+        try:
+            s.connect((self.host, self.port))
+        except Exception:
+            return False
+        else:
+            return True
+
+    def wait(self):
+        start = time.time()
+        # could be a string
+        while True:
+            if self.is_available():
+                return True
+            else:
+                if time.time() - start > self.timeout:
+                    return False
+                else:
+                    time.sleep(1)
 
 
 def wait_for_service(host, port, timeout=DEFAULT_TIMEOUT):
@@ -69,17 +107,8 @@ def wait_for_service(host, port, timeout=DEFAULT_TIMEOUT):
     @param timeout: int: length of time in seconds to try to connect before giving up
     @return: bool
     """
-    start = time.time()
-    # could be a string
-    timeout = int(timeout)
-    while True:
-        if service_is_available(host, port):
-            return True
-        else:
-            if time.time() - start > timeout:
-                return False
-            else:
-                time.sleep(1)
+    service = ServiceURL('tcp://{}:{}'.format(host, port), timeout)
+    return service.wait()
 
 
 def wait_for_url(url, timeout=DEFAULT_TIMEOUT):
@@ -89,14 +118,15 @@ def wait_for_url(url, timeout=DEFAULT_TIMEOUT):
 
     @param url: str: connection url for a TCP service
     @param timeout: int: length of time in seconds to try to connect before giving up
+    @raise RuntimeError: if no port is given or can't be guessed via the scheme
     @return: bool
     """
-    service = urlparse.urlparse(url)
-    return wait_for_service(service.hostname, service.port, timeout)
+    service = ServiceURL(url, timeout)
+    return service.wait()
 
 
-def main():
-    args = sys.argv[1:]
+def main(args=None):
+    args = args or sys.argv[1:]
     varname = os.getenv('URLWAIT_VARNAME', 'DATABASE_URL')
     timeout = os.getenv('URLWAIT_TIMEOUT', DEFAULT_TIMEOUT)
     if args:
@@ -112,11 +142,14 @@ def main():
             return 'Environment variable {0} not found'.format(varname)
 
     socket.setdefaulttimeout(int(timeout))
-
-    if wait_for_url(service_url, timeout):
-        return 0
-    else:
-        return 'Could not connect to {0}'.format(service_url)
+    service = ServiceURL(service_url, timeout)
+    try:
+        if service.wait():
+            return 0
+        else:
+            return 'Could not connect to {0}'.format(service_url)
+    except RuntimeError:
+        return 'Could not guess port for {}'.format(service.scheme)
 
 
 if __name__ == '__main__':

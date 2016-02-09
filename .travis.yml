@@ -1,0 +1,5 @@
+sudo: false
+language: python
+install:
+  - travis_retry pip install tox
+script: tox
