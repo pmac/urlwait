@@ -65,3 +65,9 @@ The module is also usable in your python code::
 
 If you don't have the service URL but do have the host and port, you can use the
 ``wait_for_service(host, port, timeout)`` function instead.
+
+
+Changelog
+=========
+
+* 0.4 - 2017-03-02 - Always return true if protocol is sqlite
