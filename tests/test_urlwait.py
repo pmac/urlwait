@@ -29,6 +29,11 @@ def test_wait_for_url_no_port():
         urlwait.wait_for_url('thedude://maude@lebowski/bunny')
 
 
+def test_wait_for_url_sqlite():
+    assert urlwait.wait_for_url('sqlite:///dude.db')
+    assert urlwait.wait_for_url('sqlite3:///walter.db')
+
+
 @patch.object(urlwait, 'ServiceURL')
 def test_wait_for_service(service_mock):
     urlwait.wait_for_service('dude', 5000, 20)
