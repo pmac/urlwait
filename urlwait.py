@@ -54,6 +54,10 @@ DEFAUTL_PORTS = {
     'redis': 6379,
     'hiredis': 6379,
 }
+NOOP_PROTOCOLS = (
+    'sqlite',
+    'sqlite3',
+)
 
 
 class ServiceURL(object):
@@ -74,6 +78,9 @@ class ServiceURL(object):
 
         @return: bool
         """
+        if self.scheme in NOOP_PROTOCOLS:
+            return True
+
         if not self.port:
             raise RuntimeError('port is required')
 
