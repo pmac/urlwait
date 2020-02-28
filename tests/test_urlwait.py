@@ -1,7 +1,7 @@
 import os
 
 import pytest
-from mock import patch
+from unittest.mock import patch
 
 import urlwait
 
