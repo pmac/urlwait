@@ -76,7 +76,7 @@ Changelog
 =========
 
 * 1.0 - 2020-02-28
-  * Close the socket to keep Python from complaining. Thanks @callahad!
-  * Update tests to only test on Python 3.6+
-  * Drop support for Python 2.x
+    * Close the socket to keep Python from complaining. Thanks @callahad!
+    * Update tests to only test on Python 3.6+
+    * Drop support for Python 2.x
 * 0.4 - 2017-03-02 - Always return true if protocol is sqlite
