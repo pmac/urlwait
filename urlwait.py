@@ -84,13 +84,13 @@ class ServiceURL(object):
         if not self.port:
             raise RuntimeError('port is required')
 
-        s = socket.socket()
-        try:
-            s.connect((self.host, self.port))
-        except Exception:
-            return False
-        else:
-            return True
+        with socket.socket() as s:
+            try:
+                s.connect((self.host, self.port))
+            except Exception:
+                return False
+            else:
+                return True
 
     def wait(self):
         start = time.time()
