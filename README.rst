@@ -2,8 +2,8 @@
 URLWait
 =======
 
-.. image:: https://img.shields.io/travis/pmclanahan/urlwait.svg
-   :target: https://travis-ci.org/pmclanahan/urlwait/
+.. image:: https://img.shields.io/travis/pmac/urlwait.svg
+   :target: https://travis-ci.org/pmac/urlwait/
 .. image:: https://img.shields.io/pypi/v/urlwait.svg
    :target: https://pypi.python.org/pypi/urlwait
 
@@ -67,7 +67,16 @@ If you don't have the service URL but do have the host and port, you can use the
 ``wait_for_service(host, port, timeout)`` function instead.
 
 
+Python Support
+==============
+
+Since version 1.0 urlwait is Python 3 only. If you need Python 2.7 support you can use a pre 1.0 release.
+
 Changelog
 =========
 
+* 1.0 - 2020-02-28
+  * Close the socket to keep Python from complaining. Thanks @callahad!
+  * Update tests to only test on Python 3.6+
+  * Drop support for Python 2.x
 * 0.4 - 2017-03-02 - Always return true if protocol is sqlite
